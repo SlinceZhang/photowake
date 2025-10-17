@@ -5,4 +5,25 @@
 :root {
   --light: #ffffff;
   --dark: #171717;
+  --color-background: 255 255 255;
+  --color-surface: 255 255 255;
+  --color-border: 229 231 235;
+  --color-muted: 107 114 128;
+  --color-foreground: 17 24 39;
+  --color-primary: 147 51 234;
+  --color-secondary: 236 72 153;
+  --color-primary-soft: 243 232 255;
+  --color-secondary-soft: 253 242 248;
+}
+
+.dark {
+  --color-background: 17 17 17;
+  --color-surface: 24 24 27;
+  --color-border: 63 63 70;
+  --color-muted: 156 163 175;
+  --color-foreground: 226 232 240;
+  --color-primary: 216 180 254;
+  --color-secondary: 249 168 212;
+  --color-primary-soft: 24 24 27;
+  --color-secondary-soft: 39 39 42;
 }

@@ -33,7 +33,7 @@ export function LanguageToggle() {
     <div ref={dropdownRef} className='relative'>
       <button
         type='button'
-        className='px-4 py-2 rounded-full ring-1 ring-gray-200 dark:ring-zinc-800'
+        className='px-4 py-2 rounded-full ring-1 ring-border'
         onClick={toggleDropdown}
       >
         <Languages />

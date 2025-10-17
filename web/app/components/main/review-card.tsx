@@ -65,10 +65,10 @@ export default function ReviewCard() {
       {PEOPLECOMMENTS.map((person) => (
         <div
           key={person.name}
-          className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'
+          className='bg-surface p-6 rounded-xl shadow-md border border-border'
         >
           <div className='flex items-center gap-4 mb-4'>
-            <div className='w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400'>
+            <div className='w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary'>
               <Image
                 src={person.avatar}
                 alt={person.name}
@@ -78,7 +78,7 @@ export default function ReviewCard() {
               />
             </div>
             <div>
-              <h3 className='font-semibold text-gray-800 dark:text-gray-200'>
+              <h3 className='font-semibold text-foreground'>
                 {person.name}
               </h3>
               <div className='flex text-yellow-400'>
@@ -86,7 +86,7 @@ export default function ReviewCard() {
               </div>
             </div>
           </div>
-          <p className='text-gray-600 dark:text-gray-400'>
+          <p className='text-muted'>
             {person.comment[locale as keyof typeof person.comment]}
           </p>
         </div>

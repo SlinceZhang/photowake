@@ -1,6 +1,10 @@
 import WidgetSelector from './widget-selector'
-import { WIDGET_PATHS, STYLE_OPTIONS, ACCESSORIES_OPTIONS } from '@/app/constants/avatar-config'
-import { SelectedWidgets } from '@/app/types/avatar'
+import {
+  WIDGET_PATHS,
+  STYLE_OPTIONS,
+  ACCESSORIES_OPTIONS,
+} from '@/app/constants/avatar-config'
+import type { SelectedWidgets } from '@/app/types/avatar'
 
 interface TabContentProps {
   activeTab: string
@@ -22,7 +26,8 @@ export default function TabContent({
           {STYLE_OPTIONS.map((style) => (
             <button
               key={style}
-              className='px-4 py-2 rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+              type='button'
+              className='px-4 py-2 rounded-lg bg-primary-soft text-primary transition-colors hover:bg-primary/20'
             >
               {style}
             </button>
@@ -36,14 +41,13 @@ export default function TabContent({
     return (
       <div className='space-y-6'>
         <div className='space-y-2'>
-          <label className='text-sm text-gray-600 dark:text-gray-400'>
-            Glasses
-          </label>
+          <label className='text-sm text-muted'>Glasses</label>
           <div className='grid grid-cols-2 gap-2'>
             {ACCESSORIES_OPTIONS.glasses.map((type) => (
               <button
                 key={type}
-                className='px-3 py-2 text-sm rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+                type='button'
+                className='px-3 py-2 text-sm rounded-lg bg-primary-soft text-primary transition-colors hover:bg-primary/20'
               >
                 {type}
               </button>
@@ -51,14 +55,13 @@ export default function TabContent({
           </div>
         </div>
         <div className='space-y-2'>
-          <label className='text-sm text-gray-600 dark:text-gray-400'>
-            Other
-          </label>
+          <label className='text-sm text-muted'>Other</label>
           <div className='grid grid-cols-2 gap-2'>
             {ACCESSORIES_OPTIONS.other.map((item) => (
               <button
                 key={item}
-                className='px-3 py-2 text-sm rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+                type='button'
+                className='px-3 py-2 text-sm rounded-lg bg-primary-soft text-primary transition-colors hover:bg-primary/20'
               >
                 {item}
               </button>
@@ -69,8 +72,8 @@ export default function TabContent({
     )
   }
 
-  // Handle widget tabs (Face, Eyes, Eyebrows, etc.)
-  const widgetPaths = WIDGET_PATHS[activeTab.toLowerCase() as keyof typeof WIDGET_PATHS]
+  const widgetPaths =
+    WIDGET_PATHS[activeTab.toLowerCase() as keyof typeof WIDGET_PATHS]
   if (!widgetPaths) return null
 
   const paths = Array.isArray(widgetPaths) ? widgetPaths : [widgetPaths]
@@ -92,4 +95,4 @@ export default function TabContent({
       </div>
     </div>
   )
-} 
+}

@@ -4,7 +4,7 @@ import Footer from '@/app/components/footer/footer'
 export default function Home() {
   return (
     <div className='w-full flex flex-col px-4'>
-      <header className='sticky top-0 z-50 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800'>
+      <header className='sticky top-0 z-50 bg-surface border-b border-border'>
         <HeaderBar />
       </header>
       <main className='mx-auto mt-24'>

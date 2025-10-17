@@ -48,7 +48,7 @@ export default function HeaderBar() {
       <div
         className={cn(
           'md:hidden w-full min-h-16 h-full flex justify-between items-center',
-          isOpen ? 'dark:border-zinc-700' : ''
+          isOpen ? 'border border-border' : ''
         )}
       >
         <div className='flex items-center gap-2'>
@@ -60,7 +60,7 @@ export default function HeaderBar() {
             height={40}
             onClick={handleTest}
           />
-          <span className='text-xs font-semibold from-purple-600 to-pink-600 bg-gradient-to-r bg-clip-text text-transparent'>
+          <span className='text-xs font-semibold from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent'>
             PhotoWaker
           </span>
         </div>
@@ -98,60 +98,59 @@ export default function HeaderBar() {
       {/* 移动端下拉菜单 */}
       <div
         className={cn(
-          'absolute top-14 left-0 w-full h-screen bg-white dark:bg-zinc-900 transition-all duration-300 ease-in-out',
+          'absolute top-14 left-0 w-full h-screen bg-surface transition-all duration-300 ease-in-out',
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
       >
         <ul className='flex flex-col max-w-[288px] mx-auto p-4 gap-4'>
           <li className='w-full'>
-            <span className='block w-full py-2 border-b dark:border-b-zinc-700'>
+            <span className='block w-full py-2 border-b border-border'>
               Icon
             </span>
           </li>
           <li className='w-full'>
-            <span className='block w-full py-2 border-b dark:border-b-zinc-700'>
+            <span className='block w-full py-2 border-b border-border'>
               Guide
             </span>
           </li>
           <li className='w-full'>
-            <span className='block w-full py-2 border-b dark:border-b-zinc-700'>
+            <span className='block w-full py-2 border-b border-border'>
               Packages
             </span>
           </li>
           <li className='w-full'>
-            <span className='block w-full py-2 border-b dark:border-b-zinc-700'>
+            <span className='block w-full py-2 border-b border-border'>
               Showcase
             </span>
           </li>
           <li className='w-full'>
-            <span className='block w-full py-2 border-b dark:border-b-zinc-700'>
+            <span className='block w-full py-2 border-b border-border'>
               License
             </span>
           </li>
-          <li className='flex justify-between items-center w-full mt-4 px-4 py-4 bg-gray-100 dark:bg-zinc-800 rounded'>
-            <p className='text-sm text-gray-500'>Appearance</p>
+          <li className='flex justify-between items-center w-full mt-4 px-4 py-4 bg-primary-soft rounded'>
+            <p className='text-sm text-muted'>Appearance</p>
             <button
               type='button'
               role='switch'
               aria-checked={resolvedTheme === 'dark'}
               title='switch appearance'
-              className='relative rounded-full w-12 h-6 border dark:border-zinc-700 bg-gray-300 dark:bg-zinc-900 transition-all duration-300 ease-in-out hover:ring-1 hover:ring-orange-500'
+              className='relative rounded-full w-12 h-6 border border-border bg-surface transition-all duration-300 ease-in-out hover:ring-1 hover:ring-primary/40'
               onClick={() =>
                 setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
               }
             >
               <span
                 className={cn(
-                  'absolute top-[0.5px] left-[1px] flex items-center justify-center w-5 h-5 bg-white dark:bg-zinc-700 rounded-full ',
-                  // 切换主题时，状态更新不同步
+                  'absolute top-[0.5px] left-[1px] flex items-center justify-center w-5 h-5 bg-surface rounded-full ',
                   resolvedTheme === 'dark'
                     ? 'translate-x-6 transition-all duration-300 ease-in-out'
                     : 'translate-x-0 transition-all duration-300 ease-in-out'
                 )}
               >
-                <span className='absolute left-[1px] top-[1px] flex items-center justify-center w-5 h-5 bg-white dark:bg-zinc-700 rounded-full transition-all duration-300'>
+                <span className='absolute left-[1px] top-[1px] flex items-center justify-center w-5 h-5 bg-surface rounded-full transition-all duration-300'>
                   <Sun className='w-3.5 h-3.5 text-yellow-500 opacity-100 dark:opacity-0 transition-opacity' />
-                  <MoonStar className='w-3.5 h-3.5 text-gray-300 absolute opacity-0 dark:opacity-100 transition-opacity' />
+                  <MoonStar className='w-3.5 h-3.5 text-muted absolute opacity-0 dark:opacity-100 transition-opacity' />
                 </span>
               </span>
             </button>

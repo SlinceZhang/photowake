@@ -3,7 +3,7 @@ import '@/app/globals.css'
 import { getMessages } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { Providers } from '../providers'
-import { inter } from '../utils/font'
+import { geistMono, geistSans, inter } from '../utils/font'
 
 export const metadata: Metadata = {
   title: 'Photo Waker',
@@ -27,7 +27,7 @@ export default async function RootLayout({
   return (
     <html lang={validLocale} className='h-full' suppressHydrationWarning>
       <body
-        className={`${inter.className} antialiased h-full bg-white dark:bg-zinc-900`}
+        className={`${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased h-full bg-background text-foreground`}
       >
         <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>

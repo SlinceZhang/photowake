@@ -1,22 +1,135 @@
 'use client'
 
-import ReviewCard from './review-card'
-import { Check } from 'lucide-react'
-import JSConfetti from 'js-confetti'
-import { useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useLocale, useTranslations } from 'next-intl'
-import TabContent from './tab-content'
+import { useRef, useState } from 'react'
 import {
-  WIDGET_STYLES,
   DEFAULT_AVATAR,
   HAIR_COLORS,
   WIDGET_PATHS,
+  WIDGET_STYLES,
 } from '@/app/constants/avatar-config'
-import { SelectedWidgets } from '@/app/types/avatar'
+import type { SelectedWidgets } from '@/app/types/avatar'
+
+type JSConfettiInstance = import('js-confetti').default
+
+const TabContent = dynamic(() => import('./tab-content'), {
+  ssr: false,
+  loading: () => <TabContentFallback />,
+})
+
+const ReviewCard = dynamic(() => import('./review-card'), {
+  ssr: false,
+  loading: () => <ReviewGridSkeleton />,
+})
+
+const TABS = [
+  'Style',
+  'Face',
+  'Eyes',
+  'Eyebrows',
+  'Nose',
+  'Mouth',
+  'Ears',
+  'Hair',
+  'Accessories',
+] as const
+
+const TERMS_SECTIONS = [
+  {
+    titleKey: 'Privacy & Security',
+    items: [
+      'Your data is encrypted and securely stored',
+      'We never share your personal information with third parties',
+      'You maintain full ownership of your created avatars',
+    ],
+  },
+  {
+    titleKey: 'Usage Rights',
+    items: [
+      'Commercial use allowed with Pro and Enterprise plans',
+      'Attribution not required for personal use',
+      'Unlimited modifications to your generated avatars',
+    ],
+  },
+  {
+    titleKey: 'Service Limitations',
+    items: [
+      'Fair usage policy applies to all plans',
+      'Generation limits based on subscription tier',
+      'Service availability subject to maintenance windows',
+    ],
+  },
+  {
+    titleKey: 'Account Terms',
+    items: [
+      'One account per user required',
+      'Account sharing is not permitted',
+      'Age restriction: 18 years or older',
+    ],
+  },
+] as const
+
+function TabContentFallback() {
+  return (
+    <div className='space-y-6'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+        {Array.from({ length: 6 }).map((_, index) => (
+          <div
+            key={index}
+            className='h-20 rounded-lg border border-border/60 bg-surface/60 animate-pulse'
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ReviewGridSkeleton() {
+  return (
+    <>
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div
+          key={index}
+          className='bg-surface border border-border rounded-xl p-6 shadow-md space-y-4 animate-pulse'
+        >
+          <div className='flex items-center gap-4'>
+            <div className='w-12 h-12 rounded-full bg-border/80' />
+            <div className='flex-1 space-y-2'>
+              <div className='h-3 w-24 rounded bg-border/70' />
+              <div className='h-3 w-16 rounded bg-border/50' />
+            </div>
+          </div>
+          <div className='space-y-2'>
+            {Array.from({ length: 3 }).map((__, textIndex) => (
+              <div key={textIndex} className='h-3 w-full rounded bg-border/60' />
+            ))}
+          </div>
+        </div>
+      ))}
+    </>
+  )
+}
+
+function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      aria-hidden
+      focusable='false'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      {...props}
+    >
+      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+    </svg>
+  )
+}
 
 export default function LandingBody() {
   const confettiRef = useRef<HTMLCanvasElement>(null)
-  const [activeTab, setActiveTab] = useState('Style')
+  const confettiInstanceRef = useRef<JSConfettiInstance | null>(null)
+  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]>('Style')
   const [selectedWidgets, setSelectedWidgets] =
     useState<SelectedWidgets>(DEFAULT_AVATAR)
   const [hairColor, setHairColor] = useState(HAIR_COLORS[0].value)
@@ -37,23 +150,35 @@ export default function LandingBody() {
     }))
   }
 
-  const handleCreateAvatar = () => {
-    if (confettiRef.current) {
-      const canvas = confettiRef.current
-      const jsConfetti = new JSConfetti({ canvas })
-      jsConfetti.addConfetti({
-        confettiColors: [
-          '#ff0000',
-          '#ffa500',
-          '#ffff00',
-          '#008000',
-          '#0000ff',
-          '#4b0082',
-          '#ee82ee',
-        ],
-        confettiNumber: 100,
+  const handleCreateAvatar = async () => {
+    if (!confettiRef.current) {
+      return
+    }
+
+    if (!confettiInstanceRef.current) {
+      const { default: JSConfetti } = await import('js-confetti')
+
+      if (!confettiRef.current) {
+        return
+      }
+
+      confettiInstanceRef.current = new JSConfetti({
+        canvas: confettiRef.current,
       })
     }
+
+    confettiInstanceRef.current.addConfetti({
+      confettiColors: [
+        '#ff0000',
+        '#ffa500',
+        '#ffff00',
+        '#008000',
+        '#0000ff',
+        '#4b0082',
+        '#ee82ee',
+      ],
+      confettiNumber: 100,
+    })
   }
 
   const handleRandomAvatar = () => {
@@ -73,28 +198,15 @@ export default function LandingBody() {
     setHairColor(randomPick(HAIR_COLORS).value)
   }
 
-  const tabs = [
-    'Style',
-    'Face',
-    'Eyes',
-    'Eyebrows',
-    'Nose',
-    'Mouth',
-    'Ears',
-    'Hair',
-    'Accessories',
-  ]
-
   return (
     <>
       <section className='flex flex-col items-center gap-8 py-12 px-4'>
-        {/* Hero Section */}
         <div className='flex flex-wrap gap-4 items-center justify-center'>
-          <h1 className='text-5xl min-h-[70px] md:text-6xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+          <h1 className='text-5xl min-h-[70px] md:text-6xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
             {t('Create Your Unique')}
           </h1>
           <span
-            className={`text-4xl md:min-h-[70px] max-h-[60px] md:text-6xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-block overflow-hidden w-0 animate-typing whitespace-nowrap border-r-4 border-r-purple-600 pb-2 leading-tight ${
+            className={`text-4xl md:min-h-[70px] max-h-[60px] md:text-6xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent inline-block overflow-hidden w-0 animate-typing whitespace-nowrap border-r-4 border-r-primary pb-2 leading-tight ${
               locale === 'zh'
                 ? '[--typing-width:6.4ch]'
                 : '[--typing-width:10.4ch]'
@@ -104,18 +216,17 @@ export default function LandingBody() {
           </span>
         </div>
 
-        <p className='text-xl text-center max-w-2xl bg-gradient-to-r from-purple-500/80 to-pink-500/80 bg-clip-text text-transparent font-medium'>
+        <p className='text-xl text-center max-w-2xl bg-gradient-to-r from-primary/80 to-secondary/80 bg-clip-text text-transparent font-medium'>
           {t('Design your personalized')}
           {t('Add vibrant colors')}
         </p>
 
-        {/* Feature Cards */}
         <div className='grid grid-cols-1 max-w-6xl md:grid-cols-2 gap-8 mt-12'>
-          <div className='group bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800 hover:border-purple-200'>
+          <div className='group bg-surface p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-border hover:border-primary/30'>
             <div className='flex items-center gap-4 mb-6'>
-              <div className='p-3 bg-gradient-to-br from-purple-100 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-xl'>
+              <div className='p-3 bg-gradient-to-br from-primary-soft to-secondary-soft rounded-xl'>
                 <svg
-                  className='w-6 h-6 text-purple-600 dark:text-purple-400'
+                  className='w-6 h-6 text-primary'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -129,20 +240,20 @@ export default function LandingBody() {
                   />
                 </svg>
               </div>
-              <h2 className='text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+              <h2 className='text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
                 {t('Generate Avatar')}
               </h2>
             </div>
-            <p className='text-gray-600 leading-relaxed'>
+            <p className='text-muted leading-relaxed'>
               {t('Create your unique digital')}
             </p>
           </div>
 
-          <div className='group bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800 hover:border-purple-200'>
+          <div className='group bg-surface p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-border hover:border-primary/30'>
             <div className='flex items-center gap-4 mb-6'>
-              <div className='p-3 bg-gradient-to-br from-purple-100 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-xl'>
+              <div className='p-3 bg-gradient-to-br from-primary-soft to-secondary-soft rounded-xl'>
                 <svg
-                  className='w-6 h-6 text-purple-600 dark:text-purple-400'
+                  className='w-6 h-6 text-primary'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -156,36 +267,34 @@ export default function LandingBody() {
                   />
                 </svg>
               </div>
-              <h2 className='text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+              <h2 className='text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
                 {t('Personalized Coloring')}
               </h2>
             </div>
-            <p className='text-gray-600 leading-relaxed'>
+            <p className='text-muted leading-relaxed'>
               {t('Express your creativity')}
             </p>
           </div>
         </div>
 
-        <button className='mt-8 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'>
+        <button className='mt-8 px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'>
           {t('Start Creating')}
         </button>
       </section>
 
-      {/* Avatar Creator Section */}
-      <section className='flex flex-col items-center gap-8 py-12 px-4 bg-gradient-to-b from-purple-50 to-pink-50 dark:from-zinc-950 dark:to-zinc-900 rounded-2xl'>
-        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent pb-[1px]'>
+      <section className='flex flex-col items-center gap-8 py-12 px-4 bg-gradient-to-b from-primary-soft to-secondary-soft rounded-2xl'>
+        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent pb-[1px]'>
           {t('Magical Avatar')}
         </h2>
 
         <div className='w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 my-8'>
-          {/* Preview Area */}
           <div className='relative h-[500px]'>
             <canvas
               ref={confettiRef}
               className='absolute inset-0 w-full h-full pointer-events-none z-50'
             />
-            <div className='flex flex-col justify-center items-center bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-zinc-800 h-full'>
-              <div className='w-[240px] h-[240px] mx-auto dark:to-pink-900/30 rounded-xl relative'>
+            <div className='flex flex-col justify-center items-center bg-surface rounded-2xl p-8 shadow-lg border border-border h-full'>
+              <div className='w-[240px] h-[240px] mx-auto rounded-xl relative'>
                 <svg
                   viewBox='0 0 240 240'
                   className='w-full h-full'
@@ -295,26 +404,24 @@ export default function LandingBody() {
               </div>
               <button
                 onClick={handleRandomAvatar}
-                className='mt-6 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90 transition-opacity'
+                className='mt-6 px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-medium hover:opacity-90 transition-opacity'
               >
                 {t('Random Generate')}
               </button>
             </div>
           </div>
 
-          {/* Control Panel */}
-          <div className='bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-zinc-800 h-[500px]'>
+          <div className='bg-surface rounded-2xl p-8 shadow-lg border border-border h-[500px]'>
             <div className='flex flex-col h-full'>
-              {/* Tabs */}
-              <div className='flex space-x-4 border-b border-gray-200 dark:border-zinc-700 mb-6 scrollbar-hide overflow-x-scroll overflow-y-hidden'>
-                {tabs.map((tab) => (
+              <div className='flex space-x-4 border-b border-border/70 mb-6 scrollbar-hide overflow-x-scroll overflow-y-hidden'>
+                {TABS.map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap -mb-[2px] ${
                       activeTab === tab
-                        ? 'text-purple-600 border-purple-600'
-                        : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-purple-600 hover:border-purple-600'
+                        ? 'text-primary border-primary'
+                        : 'text-muted border-transparent hover:text-primary hover:border-primary/40'
                     }`}
                   >
                     {tab}
@@ -322,7 +429,6 @@ export default function LandingBody() {
                 ))}
               </div>
 
-              {/* Tab Content */}
               <div className='flex-1 overflow-y-auto'>
                 <TabContent
                   activeTab={activeTab}
@@ -331,26 +437,25 @@ export default function LandingBody() {
                   onWidgetClear={handleClearWidget}
                 />
 
-                {/* Hair Color Selector */}
                 {activeTab === 'Hair' && selectedWidgets.hair && (
-                  <div className='mt-4 p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg'>
-                    <h3 className='text-sm font-medium mb-3 text-gray-700 dark:text-gray-300'>
+                  <div className='mt-4 p-4 bg-surface rounded-lg border border-border'>
+                    <h3 className='text-sm font-medium mb-3 text-foreground'>
                       {t('Hair Color')}
                     </h3>
                     <div className='flex flex-wrap gap-2'>
                       {HAIR_COLORS.map((color) => (
                         <button
                           key={color.value}
-                          className={`w-8 h-8 rounded-full border-2 transition-all ${
+                          className={`w-8 h-8 rounded-full border-2 transition-transform ${
                             hairColor === color.value
-                              ? 'border-purple-600 scale-110'
+                              ? 'border-primary scale-110'
                               : 'border-transparent hover:scale-105'
                           }`}
                           style={{
                             backgroundColor: color.value,
                             boxShadow:
                               hairColor === color.value
-                                ? '0 0 0 2px rgba(147, 51, 234, 0.3)'
+                                ? '0 0 0 2px rgb(var(--color-primary) / 0.3)'
                                 : 'none',
                           }}
                           onClick={() => setHairColor(color.value)}
@@ -362,10 +467,9 @@ export default function LandingBody() {
                 )}
               </div>
 
-              {/* Generate Button */}
               <div className='pt-6'>
                 <button
-                  className='w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity'
+                  className='w-full py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity'
                   onClick={handleCreateAvatar}
                 >
                   {t('Create Avatar')}
@@ -376,9 +480,8 @@ export default function LandingBody() {
         </div>
       </section>
 
-      {/* Reviews Section */}
       <section className='flex flex-col items-center gap-8 py-12 px-4'>
-        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent pb-[1px]'>
+        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent pb-[1px]'>
           {t('User Reviews')}
         </h2>
 
@@ -387,108 +490,30 @@ export default function LandingBody() {
         </div>
       </section>
 
-      {/* Terms of Service Section */}
       <section className='flex flex-col items-center gap-8 py-12 px-4'>
-        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent pb-[1px]'>
+        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent pb-[1px]'>
           {t('Terms of Service')}
         </h2>
 
         <div className='w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6'>
-          {/* Privacy & Security */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Privacy & Security')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Your data is encrypted and securely stored')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t(
-                    'We never share your personal information with third parties'
-                  )}
-                </span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('You maintain full ownership of your created avatars')}
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Usage Rights */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Usage Rights')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('Commercial use allowed with Pro and Enterprise plans')}
-                </span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Attribution not required for personal use')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('Unlimited modifications to your generated avatars')}
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Service Limitations */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Service Limitations')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Fair usage policy applies to all plans')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Generation limits based on subscription tier')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('Service availability subject to maintenance windows')}
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Account Terms */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Account Terms')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('One account per user required')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Account sharing is not permitted')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Age restriction: 18 years or older')}</span>
-              </li>
-            </ul>
-          </div>
+          {TERMS_SECTIONS.map((section) => (
+            <div
+              key={section.titleKey}
+              className='bg-surface p-6 rounded-xl shadow-md border border-border'
+            >
+              <h3 className='text-xl font-semibold text-primary mb-4'>
+                {t(section.titleKey)}
+              </h3>
+              <ul className='space-y-3 text-muted'>
+                {section.items.map((item) => (
+                  <li key={item} className='flex items-start gap-2'>
+                    <CheckIcon className='w-5 h-5 text-primary mt-1 flex-shrink-0' />
+                    <span>{t(item)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
     </>

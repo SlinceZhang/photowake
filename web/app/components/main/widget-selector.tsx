@@ -25,10 +25,10 @@ export default function WidgetSelector({
         alt={alt}
         width={100}
         height={100}
-        className={`cursor-pointer rounded-lg p-2 h-20 ${
+        className={`cursor-pointer rounded-lg p-2 h-20 transition-colors ${
           isSelected
-            ? 'bg-purple-100 dark:bg-purple-900'
-            : 'hover:bg-purple-50 dark:hover:bg-purple-950'
+            ? 'bg-primary-soft ring-2 ring-primary/60'
+            : 'hover:bg-primary-soft/70'
         }`}
         onClick={() => onSelect(type, src)}
       />
