@@ -48,11 +48,13 @@ PhotoWake 是一个现代化的 Web 应用程序，采用前后端分离架构�
 
 ```
 .
+├── infra/
+│   └── docker/         # Docker & Nginx 配置
+│       ├── docker-compose.yml
+│       └── nginx.conf
 ├── web/                # 前端项目
-├── server/            # 后端项目
-├── nginx.conf         # Nginx配置
-├── docker-compose.yml # Docker编排配置
-└── .github/workflows  # CI/CD配置
+├── server/             # 后端项目
+└── .github/workflows   # CI/CD配置
 ```
 
 ## 快速开始
@@ -84,11 +86,25 @@ pnpm start:dev
 
 ### 使用 Docker 部署
 
-使用 Docker Compose 启动所有服务：
+1. 复制环境变量模板并根据需要调整：
 
 ```bash
-docker-compose up -d
+cp infra/docker/.env.example infra/docker/.env
 ```
+
+2. 构建并启动整套服务（首次建议添加 `--build`）：
+
+```bash
+docker compose -f infra/docker/docker-compose.yml up --build
+```
+
+3. 打开 <http://localhost:8080> 可以访问前端页面，`http://localhost:8080/api` 返回后端接口响应。
+
+> 💡 如需挂载本地代码并启用热重载，可在另一个终端运行开发 profile：
+> ```bash
+> docker compose -f infra/docker/docker-compose.yml --profile dev up web-dev server-dev
+> ```
+> 该模式会绑定宿主机源码目录，并分别暴露 3001（前端）和 3081（后端）端口用于调试。
 
 ## 主要功能配置
 
@@ -117,9 +133,10 @@ docker-compose up -d
 
 ## 端口配置
 
-- 前端: 3000
-- 后端: 3080
-- Nginx: 80
+- 反向代理（对外访问）: 8080
+- 前端容器内部端口: 3000
+- 后端容器内部端口: 3080
+- 开发 profile 暴露端口: 3001（web-dev） / 3081（server-dev）
 
 ## 贡献指南
 
