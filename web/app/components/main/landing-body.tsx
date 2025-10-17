@@ -3,6 +3,7 @@
 import ReviewCard from './review-card'
 import { Check } from 'lucide-react'
 import JSConfetti from 'js-confetti'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import TabContent from './tab-content'
@@ -22,6 +23,11 @@ export default function LandingBody() {
   const [hairColor, setHairColor] = useState(HAIR_COLORS[0].value)
   const t = useTranslations('LandingBody')
   const locale = useLocale()
+  const prefersReducedMotion = useReducedMotion()
+
+  const ctaHover = prefersReducedMotion ? undefined : { scale: 1.03 }
+  const ctaTap = prefersReducedMotion ? undefined : { scale: 0.97 }
+  const ctaTransition = { duration: 0.16, ease: 'easeOut' as const }
 
   const handleWidgetSelect = (type: keyof SelectedWidgets, path: string) => {
     setSelectedWidgets((prev) => ({
@@ -166,9 +172,16 @@ export default function LandingBody() {
           </div>
         </div>
 
-        <button className='mt-8 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'>
+        <motion.button
+          type='button'
+          whileHover={ctaHover}
+          whileFocus={ctaHover}
+          whileTap={ctaTap}
+          transition={ctaTransition}
+          className='mt-8 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'
+        >
           {t('Start Creating')}
-        </button>
+        </motion.button>
       </section>
 
       {/* Avatar Creator Section */}
@@ -293,12 +306,17 @@ export default function LandingBody() {
                     })}
                 </svg>
               </div>
-              <button
+              <motion.button
+                type='button'
                 onClick={handleRandomAvatar}
+                whileHover={ctaHover}
+                whileFocus={ctaHover}
+                whileTap={ctaTap}
+                transition={ctaTransition}
                 className='mt-6 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90 transition-opacity'
               >
                 {t('Random Generate')}
-              </button>
+              </motion.button>
             </div>
           </div>
 
@@ -364,12 +382,17 @@ export default function LandingBody() {
 
               {/* Generate Button */}
               <div className='pt-6'>
-                <button
+                <motion.button
+                  type='button'
                   className='w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity'
                   onClick={handleCreateAvatar}
+                  whileHover={ctaHover}
+                  whileFocus={ctaHover}
+                  whileTap={ctaTap}
+                  transition={ctaTransition}
                 >
                   {t('Create Avatar')}
-                </button>
+                </motion.button>
               </div>
             </div>
           </div>
