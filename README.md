@@ -1,141 +1,254 @@
 # PhotoWake
 
-PhotoWake 是一个现代化的 Web 应用程序，采用前后端分离架构设计。
+![PhotoWake preview](./imgs/bg.png)
 
-## 预览
+PhotoWake is a bilingual avatar builder and landing experience. The project is split into a Next.js 15 (React 19) frontend and a NestJS backend that exposes a small but growing REST API. Docker Compose and an Nginx reverse proxy tie the two services together for production deployments, while pnpm scripts keep day-to-day development fast.
 
-![bg](/imgs/bg.png)
+> **Goal:** give a new contributor enough context to clone the repo, boot both services, explore the API via Swagger, and start shipping improvements in under 30 minutes.
 
-## 技术栈
+---
 
-### 前端 (Frontend)
+## Architecture
 
-- Next.js 15.0.4 (使用 App Router)
-- React 19
-- TypeScript
-- TailwindCSS
-- Clerk (身份认证)【目前已经移除】
-- next-intl (国际化)
-- Zustand (状态管理)
+### High-level topology
 
-### 后端 (Backend)
-
-- NestJS
-- TypeScript
-- ConfigModule (配置管理)
-
-### 基础设施
-
-- Docker & Docker Compose
-- Nginx (反向代理)
-- GitHub Actions (CI/CD)
-
-### 已实现功能 & 后续计划
-
-- 已实现功能
-
-  - 👉 素材管理
-  - 👻 素材选择生成头像
-  - 👹 随机生成头像
-
-- 后续计划
-  - 头像下载
-  - 头像分享
-  - 增加各种素材
-  - 加入 AI 生成头像
-
-## 项目结构
-
-```
-.
-├── web/                # 前端项目
-├── server/            # 后端项目
-├── nginx.conf         # Nginx配置
-├── docker-compose.yml # Docker编排配置
-└── .github/workflows  # CI/CD配置
+```mermaid
+graph TD
+    Browser[Browser or SSR request] -->|HTTP(S)| Nginx[Nginx Reverse Proxy]
+    Nginx -->|/| Next[Next.js Frontend (web)]
+    Nginx -->|/api| Nest[NestJS API (server)]
+    Nest -->|Future integrations| External[(Datastores / 3rd-party services)]
+    subgraph Docker Compose Stack
+        Next
+        Nest
+        Nginx
+    end
 ```
 
-## 快速开始
+### Component summary
 
-### 开发环境
+- **web/** – Next.js App Router project with next-intl powered locale routing, theme toggles, Zustand state, avatar generation UI, and axios utilities.
+- **server/** – NestJS 10 service that returns standardized response envelopes and auto-generated Swagger documentation at `/docs`.
+- **nginx.conf** – Reverse proxy rules used in production to serve the frontend and forward `/api` requests to the backend.
+- **docker-compose.yml** – Deployment manifest defining the three-container stack used locally (optional) and in CI/CD.
 
-1. 克隆项目
+---
+
+## Repository layout
+
+| Path | What lives here |
+| --- | --- |
+| `web/` | Next.js frontend (App Router, TailwindCSS, translations, SVG avatar layers) |
+| `server/` | NestJS backend (REST controllers, common response helpers, Swagger bootstrap) |
+| `docker-compose.yml` | Production stack definition (frontend + backend + nginx) |
+| `nginx.conf` | Reference Nginx configuration consumed by Docker and remote deployments |
+| `imgs/` | Static illustrations used in documentation |
+| `.github/workflows/` | GitHub Actions pipeline for building and deploying containers |
+
+---
+
+## Prerequisites
+
+| Tool | Recommended version |
+| --- | --- |
+| [Node.js](https://nodejs.org/) | ≥ 20.11 (Next.js 15 requirement) |
+| [pnpm](https://pnpm.io/) | ≥ 9 (repo currently uses pnpm 10.18.3) |
+| [Docker & Docker Compose](https://docs.docker.com/get-docker/) | Latest stable (optional for local dev, required for production parity) |
+| Git | Latest stable |
+
+> **Tip:** install pnpm globally: `npm install -g pnpm@latest`.
+
+---
+
+## Local development workflow
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/slince-zero/photowake.git
+   cd photowake
+   ```
+
+2. **Install dependencies** (frontend and backend manage their own lockfiles)
+   ```bash
+   pnpm --dir web install
+   pnpm --dir server install
+   ```
+
+3. **Configure environment variables** (see [Environment configuration](#environment-configuration))
+   ```bash
+   cp web/.env.example web/.env.local
+   cp server/.env.example server/.env
+   ```
+
+4. **Start both services**
+   - Run everything with one command from the repo root:
+     ```bash
+     pnpm dev
+     ```
+     This uses `pnpm --filter web dev` and `pnpm --filter server dev` to launch both processes.
+
+   - …or start them individually if you prefer separate terminals:
+     ```bash
+     pnpm --dir web dev         # Next.js on http://localhost:3000
+     pnpm --dir server dev      # NestJS on http://localhost:3080/api
+     ```
+
+5. **Verify the stack**
+   - Frontend: `http://localhost:3000`
+   - API health check: `curl http://localhost:3080/api`
+   - Swagger UI: `http://localhost:3080/docs`
+
+### Useful pnpm scripts
+
+| Scope | Command | Description |
+| --- | --- | --- |
+| root | `pnpm dev` | Boots frontend (Next.js) and backend (NestJS) concurrently |
+| web | `pnpm --dir web dev` | Runs the Next.js dev server with Turbopack |
+| web | `pnpm --dir web build` | Produces an optimized production build |
+| web | `pnpm --dir web lint` | Lints the frontend codebase |
+| server | `pnpm --dir server dev` | Runs the NestJS server in watch mode |
+| server | `pnpm --dir server start:prod` | Starts the compiled NestJS app |
+| server | `pnpm --dir server test` | Executes backend unit tests |
+
+---
+
+## Environment configuration
+
+Example files are provided for both services. Copy them, update values as needed, and keep real secrets out of source control.
 
 ```bash
-git clone https://github.com/slince-zero/photowake.git
-cd photowake
+cp web/.env.example web/.env.local
+cp server/.env.example server/.env
 ```
 
-2. 启动前端开发服务器
+### Frontend (`web/.env.local`)
+
+| Variable | Required | Default | Notes |
+| --- | --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | ✅ | `http://localhost:3080/api` | Base URL axios uses for REST calls. Exposed to the browser. |
+| `NEXT_PUBLIC_API_URL_DEV` | ⛔️ (optional) | — | Uncomment if you need to point the local UI at a remote/staging API. |
+
+### Backend (`server/.env`)
+
+| Variable | Required | Default | Notes |
+| --- | --- | --- | --- |
+| `PORT` | ✅ | `3080` | Port listened to by NestJS. Keep aligned with Docker/Nginx expectations. |
+
+### Production/CI secrets
+
+These do **not** live in `.env` files:
+- **`SSH_PRIVATE_KEY`** – used by the deployment job to SSH into the target server.
+- **`SERVER_IP`** – host the deployment pipeline dials into.
+- **`SERVER_USER`** – user with permissions to deploy Docker containers.
+- **`GITHUB_TOKEN`** – automatically provided by Actions for pushing to GHCR (no manual setup required).
+
+Store the secrets above in the GitHub repository’s *Settings → Secrets and variables → Actions* page.
+
+---
+
+## API documentation & response envelope
+
+- Base path: `http://localhost:3080/api`
+- Interactive docs and OpenAPI schema: `http://localhost:3080/docs`
+
+Every HTTP response is wrapped in the standard envelope:
+
+```json
+{
+  "data": <payload>,
+  "message": "Optional human-friendly summary",
+  "error": null
+}
+```
+
+Example
 
 ```bash
-cd web
-pnpm install
-pnpm dev
+curl http://localhost:3080/api | jq
 ```
 
-3. 启动后端服务器
+```json
+{
+  "data": "hello world",
+  "message": "API is reachable",
+  "error": null
+}
+```
+
+When creating new controllers, reuse this structure for predictable error handling on the frontend.
+
+---
+
+## Docker workflow
+
+Docker is optional for day-to-day development but mirrors production closely.
+
+### Local preview with Compose
 
 ```bash
-cd server
-pnpm install
-pnpm start:dev
+docker compose up --build
 ```
 
-### 使用 Docker 部署
+- `photowake-frontend`: Next.js app served on port 3000.
+- `photowake-backend`: NestJS API on port 3080 behind the `/api` prefix.
+- `nginx`: Proxies `/` to the frontend and `/api` to the backend on port 80.
 
-使用 Docker Compose 启动所有服务：
+> **Tip:** if you want to test local changes without pushing images, swap the `image` entries in `docker-compose.yml` for `build: ./web` and `build: ./server` temporarily.
 
-```bash
-docker-compose up -d
-```
+### Production deployment
 
-## 主要功能配置
+The GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and pushes container images to GitHub Container Registry (GHCR), SSHs into the target host, updates `docker-compose.yml`, and restarts the stack. The same manifest lives in the repo so you can test the exact configuration locally.
 
-### Clerk 身份认证配置
+---
 
-- 登录页面位于 `web/app/login/[[...rest]]/page.tsx`
-- 使用 Clerk 推荐的标准配置方式
+## CI/CD expectations
 
-### 国际化配置 (next-intl)
+- Triggered on pushes and pull requests targeting `main`.
+- `build` job:
+  - Checks out the repo.
+  - Generates a timestamp + git hash image tag.
+  - Builds/pushes `web` and `server` images to GHCR.
+- `deploy` job (needs `build`):
+  - Uses `SSH_PRIVATE_KEY`, `SERVER_IP`, `SERVER_USER` secrets to reach the production host.
+  - Uploads `docker-compose.yml`, swaps images to the freshly built tag, and runs `docker-compose up -d --force-recreate`.
+  - Performs an HTTP health check against `http://<SERVER_IP>/health`.
 
-1. 按照[官方文档](https://next-intl.dev/)配置：
+### Contributor checklist before opening a PR
 
-   - messages/
-   - i18n/
-   - middleware.ts
+- `pnpm --dir web lint`
+- `pnpm --dir server test`
+- Verify `pnpm dev` boots both services without runtime errors.
+- Ensure documentation stays in sync when new env vars or routes are introduced.
 
-2. 注意事项：
-   - Next.js 15.0.4 需要处理异步路由参数
-   - 配置完之后，项目会有一个错误，Route "/[locale]" used `params.locale`. `params` should be awaited before using its properties。这个错误是 Next.js 15.0.4 版本中的一个新要求。错误信息表示在使用动态路由参数 params.locale 之前需要先等待（await）它。这是因为在服务器组件中，params 是一个异步对象。
+---
 
-- 使用以下命令修复 params 异步问题：
-  ```bash
-  npx @next/codemod@canary next-async-request-api .
-  ```
-- 键名长度需要适中以确保正常翻译
+## Data & migrations
 
-## 端口配置
+The API currently serves stateless responses and does not connect to a persistent datastore yet. When persistence is introduced, follow these conventions:
 
-- 前端: 3000
-- 后端: 3080
-- Nginx: 80
+1. Add your ORM/SDK dependencies inside `server/` and expose pnpm scripts such as `pnpm --dir server migrate:dev` and `migrate:deploy`.
+2. Document any new required environment variables in `server/.env.example` and the table above.
+3. Update this section with:
+   - How to generate migrations.
+   - How to apply migrations locally and in CI/CD (e.g., `pnpm --dir server migrate:deploy`).
+4. Prefer idempotent migrations so the deployment workflow can run them safely before reloading containers.
 
-## 贡献指南
+Until then, no database setup is required to run the project locally or in Docker.
 
-1. Fork 项目
-2. 创建功能分支
-3. 提交更改
-4. 发起 Pull Request
+---
 
-## 许可证
+## Troubleshooting
 
-本项目采用 [MIT](./LICENSE) 开源协议。
+| Issue | Fix |
+| --- | --- |
+| **Locale routing error** – Next.js 15 requires awaiting async route params (`Route "/[locale]" used params.locale`). | Run `npx @next/codemod@canary next-async-request-api web` and ensure components await the params object before reading properties. |
+| **Ports already in use** when starting dev servers. | Stop other services on ports 3000/3080 or export new values (`export PORT=4080` + update `NEXT_PUBLIC_API_URL`). |
+| **Axios requests hit the wrong endpoint**. | Double-check `NEXT_PUBLIC_API_URL` in `web/.env.local` and restart the dev server so Next.js reloads environment variables. |
+| **Swagger UI 404s**. | Ensure the backend is running (`pnpm --dir server dev`) and the Nest app boot logs show `Nest application successfully started`. Swagger is served from the same process. |
+| **Docker Compose cannot pull images**. | Authenticate with GHCR (`echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin`) or switch to local builds by adding `build:` entries in `docker-compose.yml`. |
 
-这意味着你可以：
-- ✅ 自由使用
-- ✅ 自由修改
-- ✅ 自由分发
-- ✅ 商业使用
+---
 
-唯一的要求是在使用时保留原始许可证和版权信息。
+## License
+
+PhotoWake is released under the [MIT License](./LICENSE).
