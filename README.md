@@ -121,6 +121,11 @@ docker-compose up -d
 - 后端: 3080
 - Nginx: 80
 
+## API 文档
+
+- Swagger UI 位于 `http://localhost:3080/docs`
+- 如果接口需要鉴权，在 Swagger 页面右上角通过 `Authorize` 按钮填写 `Authorization: Bearer <token>` 头信息
+
 ## 贡献指南
 
 1. Fork 项目
