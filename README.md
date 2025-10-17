@@ -121,12 +121,37 @@ docker-compose up -d
 - 后端: 3080
 - Nginx: 80
 
+## CI/CD 工作流
+
+### Pull Request 流水线
+
+- 触发：针对 `main` 或 `dev` 分支的 Pull Request。
+- 步骤：分别在 `web` 与 `server` 子项目中执行 `pnpm install --frozen-lockfile`、`pnpm lint`、`pnpm test`（Web 项目会自动忽略缺失的脚本）以及 `pnpm build`。
+- 缓存：使用 pnpm 的缓存依赖，缩短重复运行的安装时间。
+
+### Release 流水线
+
+- 触发：向 `dev` 或 `main` 分支推送代码，或通过手动 `workflow_dispatch`。
+- `dev` 分支：部署到 Vercel 的 preview 环境，并发布一个带有 `dev-<短 SHA>` 标签的后端镜像。
+- `main` 分支：部署到 Vercel 的 production 环境，同时推送 `prod-<短 SHA>` 与 `latest` 标签的后端镜像。
+- 依赖的 GitHub Secrets：`VERCEL_TOKEN`、`VERCEL_ORG_ID`、`VERCEL_WEB_PROJECT_ID`、`GHCR_PAT` 用于认证 Vercel 与 GHCR。
+
+### 镜像与版本策略
+
+- Release 流水线会输出镜像引用（image reference），并在后续步骤中写入部署摘要，方便追踪本次发布使用的镜像。
+- `dev` 分支使用 `dev-<短 SHA>` 前缀，`main` 分支使用 `prod-<短 SHA>` 前缀，并在生产发布时额外更新 `latest` 标签。
+
+### 必须的状态检查
+
+- 请在仓库的分支保护规则中，将 `PR Pipeline / Web quality gates` 与 `PR Pipeline / Server quality gates` 标记为必需状态检查，以保证合并到 `main` 的变更已经通过全部质量门槛。
+
 ## 贡献指南
 
 1. Fork 项目
 2. 创建功能分支
-3. 提交更改
-4. 发起 Pull Request
+3. 阅读并遵循 [CONTRIBUTING.md](./CONTRIBUTING.md)
+4. 提交更改
+5. 发起 Pull Request
 
 ## 许可证
 
