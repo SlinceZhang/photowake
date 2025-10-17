@@ -1,0 +1,22 @@
+---
+title: Skeleton
+---
+
+Use the `Skeleton` component to hint at pending content while preserving layout. Combine with width utilities to match the target element.
+
+```tsx
+import { Skeleton } from '@/app/components/ui/skeleton'
+
+export function SkeletonExample() {
+  return (
+    <div className="space-y-3">
+      <Skeleton className="w-full" />
+      <Skeleton intent="primary" className="w-3/4" />
+      <div className="flex gap-3">
+        <Skeleton size="icon" />
+        <Skeleton size="sm" className="w-24" />
+      </div>
+    </div>
+  )
+}
+```

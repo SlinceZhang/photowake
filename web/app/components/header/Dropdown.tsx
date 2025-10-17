@@ -1,3 +1,6 @@
+import { Button } from '@/app/components/ui/button'
+import { Card } from '@/app/components/ui/card'
+import { cn } from '@/app/utils/cn'
 import { useLanguageStore } from '@/app/store/useLanguageStore'
 import { useRouter, usePathname } from 'next/navigation'
 
@@ -25,21 +28,51 @@ export default function Dropdown({ currentLang }: { currentLang: string }) {
   }
 
   return (
-    <div className='absolute w-24 p-2 flex flex-col gap-2 mt-2 text-lg border shadow bg-white dark:bg-zinc-900 dark:border-zinc-800 rounded-md'>
-      <ul>
-        <li
-          className='hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded px-2 py-1 cursor-pointer'
-          onClick={() => handleLanguageChange('zh')}
-        >
-          zh {validLang === 'zh' && <span>✓</span>}
+    <Card
+      intent='surface'
+      size='sm'
+      className='absolute left-0 mt-2 flex w-28 flex-col gap-2 p-2 text-sm shadow-lg'
+    >
+      <ul role='listbox' aria-label='Select language' className='grid gap-1'>
+        <li>
+          <Button
+            type='button'
+            role='option'
+            aria-selected={validLang === 'zh'}
+            intent='ghost'
+            size='sm'
+            className={cn(
+              'w-full justify-between px-2',
+              validLang === 'zh'
+                ? 'bg-purple-50 font-semibold text-purple-600 dark:bg-purple-900/40 dark:text-purple-200'
+                : undefined
+            )}
+            onClick={() => handleLanguageChange('zh')}
+          >
+            <span>zh</span>
+            {validLang === 'zh' && <span>✓</span>}
+          </Button>
         </li>
-        <li
-          className='hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded px-2 py-1 cursor-pointer'
-          onClick={() => handleLanguageChange('en')}
-        >
-          en {validLang === 'en' && <span>✓</span>}
+        <li>
+          <Button
+            type='button'
+            role='option'
+            aria-selected={validLang === 'en'}
+            intent='ghost'
+            size='sm'
+            className={cn(
+              'w-full justify-between px-2',
+              validLang === 'en'
+                ? 'bg-purple-50 font-semibold text-purple-600 dark:bg-purple-900/40 dark:text-purple-200'
+                : undefined
+            )}
+            onClick={() => handleLanguageChange('en')}
+          >
+            <span>en</span>
+            {validLang === 'en' && <span>✓</span>}
+          </Button>
         </li>
       </ul>
-    </div>
+    </Card>
   )
 }

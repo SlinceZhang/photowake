@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { ThemeToggle } from './theme-toggle'
 import { LanguageToggle } from './language-toggle'
-import cn from 'classnames'
+import { cn } from '@/app/utils/cn'
 import { MoonStar, Sun, Github } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { getTest } from '@/app/api/test'

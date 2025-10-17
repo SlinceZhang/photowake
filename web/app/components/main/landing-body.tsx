@@ -13,6 +13,16 @@ import {
   WIDGET_PATHS,
 } from '@/app/constants/avatar-config'
 import { SelectedWidgets } from '@/app/types/avatar'
+import { Button } from '@/app/components/ui/button'
+import { Input } from '@/app/components/ui/input'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/app/components/ui/card'
+import { cn } from '@/app/utils/cn'
 
 export default function LandingBody() {
   const confettiRef = useRef<HTMLCanvasElement>(null)
@@ -110,12 +120,15 @@ export default function LandingBody() {
         </p>
 
         {/* Feature Cards */}
-        <div className='grid grid-cols-1 max-w-6xl md:grid-cols-2 gap-8 mt-12'>
-          <div className='group bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800 hover:border-purple-200'>
-            <div className='flex items-center gap-4 mb-6'>
-              <div className='p-3 bg-gradient-to-br from-purple-100 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-xl'>
+        <div className='mt-12 grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-2'>
+          <Card
+            size='lg'
+            className='group border-gray-100 transition-all duration-300 hover:border-purple-200 hover:shadow-xl dark:border-zinc-800'
+          >
+            <CardHeader className='flex flex-row items-center gap-4 pb-0'>
+              <div className='rounded-xl bg-gradient-to-br from-purple-100 to-pink-50 p-3 dark:from-purple-900 dark:to-pink-900'>
                 <svg
-                  className='w-6 h-6 text-purple-600 dark:text-purple-400'
+                  className='h-6 w-6 text-purple-600 dark:text-purple-400'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -129,20 +142,25 @@ export default function LandingBody() {
                   />
                 </svg>
               </div>
-              <h2 className='text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+              <CardTitle className='bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-2xl font-bold text-transparent'>
                 {t('Generate Avatar')}
-              </h2>
-            </div>
-            <p className='text-gray-600 leading-relaxed'>
-              {t('Create your unique digital')}
-            </p>
-          </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className='mt-6'>
+              <CardDescription className='text-base leading-relaxed text-gray-600 dark:text-gray-300'>
+                {t('Create your unique digital')}
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-          <div className='group bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800 hover:border-purple-200'>
-            <div className='flex items-center gap-4 mb-6'>
-              <div className='p-3 bg-gradient-to-br from-purple-100 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-xl'>
+          <Card
+            size='lg'
+            className='group border-gray-100 transition-all duration-300 hover:border-purple-200 hover:shadow-xl dark:border-zinc-800'
+          >
+            <CardHeader className='flex flex-row items-center gap-4 pb-0'>
+              <div className='rounded-xl bg-gradient-to-br from-purple-100 to-pink-50 p-3 dark:from-purple-900 dark:to-pink-900'>
                 <svg
-                  className='w-6 h-6 text-purple-600 dark:text-purple-400'
+                  className='h-6 w-6 text-purple-600 dark:text-purple-400'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -156,19 +174,21 @@ export default function LandingBody() {
                   />
                 </svg>
               </div>
-              <h2 className='text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+              <CardTitle className='bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-2xl font-bold text-transparent'>
                 {t('Personalized Coloring')}
-              </h2>
-            </div>
-            <p className='text-gray-600 leading-relaxed'>
-              {t('Express your creativity')}
-            </p>
-          </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className='mt-6'>
+              <CardDescription className='text-base leading-relaxed text-gray-600 dark:text-gray-300'>
+                {t('Express your creativity')}
+              </CardDescription>
+            </CardContent>
+          </Card>
         </div>
 
-        <button className='mt-8 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'>
+        <Button intent='primary' size='lg' className='mt-8 rounded-full px-8 py-4 text-xl'>
           {t('Start Creating')}
-        </button>
+        </Button>
       </section>
 
       {/* Avatar Creator Section */}
@@ -184,7 +204,10 @@ export default function LandingBody() {
               ref={confettiRef}
               className='absolute inset-0 w-full h-full pointer-events-none z-50'
             />
-            <div className='flex flex-col justify-center items-center bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-zinc-800 h-full'>
+            <Card
+              size='lg'
+              className='flex h-full flex-col items-center justify-center p-8 shadow-lg border-gray-100 dark:border-zinc-800'
+            >
               <div className='w-[240px] h-[240px] mx-auto dark:to-pink-900/30 rounded-xl relative'>
                 <svg
                   viewBox='0 0 240 240'
@@ -293,32 +316,41 @@ export default function LandingBody() {
                     })}
                 </svg>
               </div>
-              <button
+              <Button
+                intent='primary'
+                size='md'
+                className='mt-6 rounded-lg'
                 onClick={handleRandomAvatar}
-                className='mt-6 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90 transition-opacity'
               >
                 {t('Random Generate')}
-              </button>
-            </div>
+              </Button>
+            </Card>
           </div>
 
           {/* Control Panel */}
-          <div className='bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-zinc-800 h-[500px]'>
-            <div className='flex flex-col h-full'>
+          <Card
+            size='lg'
+            className='h-[500px] border-gray-100 p-8 shadow-lg dark:border-zinc-800'
+          >
+            <div className='flex h-full flex-col'>
               {/* Tabs */}
               <div className='flex space-x-4 border-b border-gray-200 dark:border-zinc-700 mb-6 scrollbar-hide overflow-x-scroll overflow-y-hidden'>
                 {tabs.map((tab) => (
-                  <button
+                  <Button
                     key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap -mb-[2px] ${
+                    type='button'
+                    intent='ghost'
+                    size='sm'
+                    className={cn(
+                      'rounded-none border-b-2 px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap -mb-[2px]',
                       activeTab === tab
-                        ? 'text-purple-600 border-purple-600'
-                        : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-purple-600 hover:border-purple-600'
-                    }`}
+                        ? 'border-purple-600 text-purple-600'
+                        : 'border-transparent text-gray-600 hover:border-purple-600 hover:text-purple-600 dark:text-gray-400'
+                    )}
+                    onClick={() => setActiveTab(tab)}
                   >
                     {tab}
-                  </button>
+                  </Button>
                 ))}
               </div>
 
@@ -358,21 +390,30 @@ export default function LandingBody() {
                         />
                       ))}
                     </div>
+                    <Input
+                      value={hairColor}
+                      onChange={(event) => setHairColor(event.target.value)}
+                      size='sm'
+                      aria-label={t('Hair Color')}
+                      className='mt-3'
+                    />
                   </div>
                 )}
               </div>
 
               {/* Generate Button */}
               <div className='pt-6'>
-                <button
-                  className='w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity'
+                <Button
+                  intent='primary'
+                  size='md'
+                  className='w-full justify-center rounded-lg font-semibold'
                   onClick={handleCreateAvatar}
                 >
                   {t('Create Avatar')}
-                </button>
+                </Button>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </section>
 
@@ -395,100 +436,126 @@ export default function LandingBody() {
 
         <div className='w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6'>
           {/* Privacy & Security */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Privacy & Security')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Your data is encrypted and securely stored')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t(
-                    'We never share your personal information with third parties'
-                  )}
-                </span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('You maintain full ownership of your created avatars')}
-                </span>
-              </li>
-            </ul>
-          </div>
+          <Card
+            size='md'
+            className='border-gray-100 shadow-md dark:border-zinc-800'
+          >
+            <CardHeader className='pb-2'>
+              <CardTitle className='text-xl text-purple-600 dark:text-purple-400'>
+                {t('Privacy & Security')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className='space-y-3 text-gray-600 dark:text-gray-400'>
+              <ul className='space-y-3'>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>{t('Your data is encrypted and securely stored')}</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>
+                    {t('We never share your personal information with third parties')}
+                  </span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>
+                    {t('You maintain full ownership of your created avatars')}
+                  </span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
 
           {/* Usage Rights */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Usage Rights')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('Commercial use allowed with Pro and Enterprise plans')}
-                </span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Attribution not required for personal use')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('Unlimited modifications to your generated avatars')}
-                </span>
-              </li>
-            </ul>
-          </div>
+          <Card
+            size='md'
+            className='border-gray-100 shadow-md dark:border-zinc-800'
+          >
+            <CardHeader className='pb-2'>
+              <CardTitle className='text-xl text-purple-600 dark:text-purple-400'>
+                {t('Usage Rights')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className='space-y-3 text-gray-600 dark:text-gray-400'>
+              <ul className='space-y-3'>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>
+                    {t('Commercial use allowed with Pro and Enterprise plans')}
+                  </span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>{t('Attribution not required for personal use')}</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>
+                    {t('Unlimited modifications to your generated avatars')}
+                  </span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
 
           {/* Service Limitations */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Service Limitations')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Fair usage policy applies to all plans')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Generation limits based on subscription tier')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>
-                  {t('Service availability subject to maintenance windows')}
-                </span>
-              </li>
-            </ul>
-          </div>
+          <Card
+            size='md'
+            className='border-gray-100 shadow-md dark:border-zinc-800'
+          >
+            <CardHeader className='pb-2'>
+              <CardTitle className='text-xl text-purple-600 dark:text-purple-400'>
+                {t('Service Limitations')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className='space-y-3 text-gray-600 dark:text-gray-400'>
+              <ul className='space-y-3'>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>{t('Fair usage policy applies to all plans')}</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>{t('Generation limits based on subscription tier')}</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>
+                    {t('Service availability subject to maintenance windows')}
+                  </span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
 
           {/* Account Terms */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
-              {t('Account Terms')}
-            </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('One account per user required')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Account sharing is not permitted')}</span>
-              </li>
-              <li className='flex items-start gap-2'>
-                <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
-                <span>{t('Age restriction: 18 years or older')}</span>
-              </li>
-            </ul>
-          </div>
+          <Card
+            size='md'
+            className='border-gray-100 shadow-md dark:border-zinc-800'
+          >
+            <CardHeader className='pb-2'>
+              <CardTitle className='text-xl text-purple-600 dark:text-purple-400'>
+                {t('Account Terms')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className='space-y-3 text-gray-600 dark:text-gray-400'>
+              <ul className='space-y-3'>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>{t('One account per user required')}</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>{t('Account sharing is not permitted')}</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <Check className='mt-1 h-5 w-5 flex-shrink-0 text-green-500' />
+                  <span>{t('Age restriction: 18 years or older')}</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </>

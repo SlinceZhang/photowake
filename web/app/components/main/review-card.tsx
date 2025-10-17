@@ -1,5 +1,11 @@
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/app/components/ui/card'
 
 const PEOPLECOMMENTS = [
   {
@@ -63,12 +69,13 @@ export default function ReviewCard() {
   return (
     <>
       {PEOPLECOMMENTS.map((person) => (
-        <div
+        <Card
           key={person.name}
-          className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'
+          size='md'
+          className='border-gray-100 shadow-md dark:border-zinc-800'
         >
-          <div className='flex items-center gap-4 mb-4'>
-            <div className='w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400'>
+          <CardHeader className='flex flex-row items-center gap-4 pb-2'>
+            <div className='h-12 w-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400'>
               <Image
                 src={person.avatar}
                 alt={person.name}
@@ -78,18 +85,18 @@ export default function ReviewCard() {
               />
             </div>
             <div>
-              <h3 className='font-semibold text-gray-800 dark:text-gray-200'>
+              <CardTitle className='text-base font-semibold text-gray-800 dark:text-gray-200'>
                 {person.name}
-              </h3>
+              </CardTitle>
               <div className='flex text-yellow-400'>
                 {'★'.repeat(person.rating)}
               </div>
             </div>
-          </div>
-          <p className='text-gray-600 dark:text-gray-400'>
-            {person.comment[locale as keyof typeof person.comment]}
-          </p>
-        </div>
+          </CardHeader>
+          <CardContent className='text-gray-600 dark:text-gray-400'>
+            <p>{person.comment[locale as keyof typeof person.comment]}</p>
+          </CardContent>
+        </Card>
       ))}
     </>
   )

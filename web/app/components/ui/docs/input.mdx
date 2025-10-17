@@ -1,0 +1,19 @@
+---
+title: Input
+---
+
+Inputs expose a single-line text field with clear focus outlines, intent styling, and multiple heights.
+
+```tsx
+import { Input } from '@/app/components/ui/input'
+
+export function InputExample() {
+  return (
+    <form className="flex flex-col gap-3">
+      <Input placeholder="Display name" />
+      <Input intent="subtle" placeholder="Search widgets" />
+      <Input intent="danger" size="sm" aria-invalid defaultValue="hair-2" />
+    </form>
+  )
+}
+```
