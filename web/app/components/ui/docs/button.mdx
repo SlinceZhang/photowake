@@ -1,0 +1,28 @@
+---
+title: Button
+---
+
+The `Button` component wraps native `button` semantics with consistent styling, sizing, and intent variants. Use the `intent` prop for tone and `size` for spatial density. Pass `asChild` to render the button styles on a different element.
+
+```tsx
+import { Sun } from 'lucide-react'
+import { Button } from '@/app/components/ui/button'
+
+export function ButtonExamples() {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <Button intent="primary">Start creating</Button>
+      <Button intent="secondary">Secondary action</Button>
+      <Button intent="outline">Outline</Button>
+      <Button intent="tint">Tint</Button>
+      <Button intent="ghost">Ghost</Button>
+      <Button intent="link" asChild>
+        <a href="#docs">View docs</a>
+      </Button>
+      <Button intent="primary" size="icon" aria-label="Toggle theme">
+        <Sun className="h-5 w-5" />
+      </Button>
+    </div>
+  )
+}
+```

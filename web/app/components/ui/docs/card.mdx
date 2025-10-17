@@ -1,0 +1,40 @@
+---
+title: Card
+---
+
+Cards provide a flexible container with padding, borders, and optional header/body helpers. Choose the `intent` that matches the surface treatment and adjust spacing with `size`.
+
+```tsx
+import { Button } from '@/app/components/ui/button'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/app/components/ui/card'
+
+export function CardExample() {
+  return (
+    <Card intent="surface" size="lg">
+      <CardHeader>
+        <CardTitle>Generate avatar</CardTitle>
+        <CardDescription>Build avatars with layer-based controls.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          Quickly assemble a look by mixing and matching widgets. Cards keep
+          text and controls aligned.
+        </p>
+      </CardContent>
+      <CardFooter>
+        <Button size="sm">Get started</Button>
+        <Button intent="ghost" size="sm">
+          Learn more
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+}
+```

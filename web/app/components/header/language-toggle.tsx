@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/app/components/ui/button'
 import { Languages } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import Dropdown from './Dropdown'
@@ -31,13 +32,18 @@ export function LanguageToggle() {
   }, [])
   return (
     <div ref={dropdownRef} className='relative'>
-      <button
+      <Button
         type='button'
-        className='px-4 py-2 rounded-full ring-1 ring-gray-200 dark:ring-zinc-800'
+        intent='outline'
+        size='icon'
+        aria-haspopup='listbox'
+        aria-expanded={isOpen}
+        aria-label='Toggle language menu'
+        className='rounded-full'
         onClick={toggleDropdown}
       >
-        <Languages />
-      </button>
+        <Languages className='h-5 w-5' />
+      </Button>
       {isOpen && <Dropdown currentLang={language} />}
     </div>
   )

@@ -1,4 +1,5 @@
 import WidgetSelector from './widget-selector'
+import { Button } from '@/app/components/ui/button'
 import { WIDGET_PATHS, STYLE_OPTIONS, ACCESSORIES_OPTIONS } from '@/app/constants/avatar-config'
 import { SelectedWidgets } from '@/app/types/avatar'
 
@@ -18,14 +19,17 @@ export default function TabContent({
   if (activeTab === 'Style') {
     return (
       <div className='space-y-6'>
-        <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+        <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
           {STYLE_OPTIONS.map((style) => (
-            <button
+            <Button
               key={style}
-              className='px-4 py-2 rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+              type='button'
+              intent='tint'
+              size='sm'
+              className='w-full justify-center'
             >
               {style}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -41,12 +45,15 @@ export default function TabContent({
           </label>
           <div className='grid grid-cols-2 gap-2'>
             {ACCESSORIES_OPTIONS.glasses.map((type) => (
-              <button
+              <Button
                 key={type}
-                className='px-3 py-2 text-sm rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+                type='button'
+                intent='tint'
+                size='sm'
+                className='w-full justify-center'
               >
                 {type}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -56,12 +63,15 @@ export default function TabContent({
           </label>
           <div className='grid grid-cols-2 gap-2'>
             {ACCESSORIES_OPTIONS.other.map((item) => (
-              <button
+              <Button
                 key={item}
-                className='px-3 py-2 text-sm rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+                type='button'
+                intent='tint'
+                size='sm'
+                className='w-full justify-center'
               >
                 {item}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
