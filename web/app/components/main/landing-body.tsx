@@ -3,7 +3,7 @@
 import ReviewCard from './review-card'
 import { Check } from 'lucide-react'
 import JSConfetti from 'js-confetti'
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import TabContent from './tab-content'
 import {
@@ -13,6 +13,9 @@ import {
   WIDGET_PATHS,
 } from '@/app/constants/avatar-config'
 import { SelectedWidgets } from '@/app/types/avatar'
+import { EmptyState, ErrorState, LoadingState } from '@/app/components/ui/data-state'
+import { getServerGreeting } from '@/app/api'
+import { useApi } from '@/hooks/useApi'
 
 export default function LandingBody() {
   const confettiRef = useRef<HTMLCanvasElement>(null)
@@ -22,6 +25,38 @@ export default function LandingBody() {
   const [hairColor, setHairColor] = useState(HAIR_COLORS[0].value)
   const t = useTranslations('LandingBody')
   const locale = useLocale()
+
+  const fetchGreeting = useCallback(() => getServerGreeting(), [])
+  const {
+    data: greeting,
+    response: greetingResponse,
+    error: greetingError,
+    loading: greetingLoading,
+    refresh: refreshGreeting,
+    isSuccess: greetingSuccess,
+  } = useApi(fetchGreeting, {
+    cacheKey: 'server-greeting',
+    retryCount: 2,
+    retryInterval: 1500,
+    loadingDelay: 250,
+  })
+  const handleRefreshGreeting = useCallback(() => {
+    refreshGreeting()
+  }, [refreshGreeting])
+
+  const greetingMessage =
+    typeof greeting === 'string' ? greeting.trim() : ''
+  const hasGreeting = greetingSuccess && greetingMessage.length > 0
+  const showErrorState =
+    !greetingLoading &&
+    (Boolean(greetingError) ||
+      (greetingResponse && !greetingSuccess && !!greetingResponse.error))
+  const errorMessage =
+    greetingError?.error?.message ??
+    greetingResponse?.error?.message ??
+    t('ApiStatusError')
+  const showEmptyState =
+    !greetingLoading && !showErrorState && !hasGreeting
 
   const handleWidgetSelect = (type: keyof SelectedWidgets, path: string) => {
     setSelectedWidgets((prev) => ({
@@ -169,6 +204,59 @@ export default function LandingBody() {
         <button className='mt-8 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'>
           {t('Start Creating')}
         </button>
+
+        <div className='mt-10 w-full max-w-xl'>
+          {greetingLoading ? (
+            <LoadingState
+              title={t('ApiStatusHeading')}
+              description={t('ApiStatusLoading')}
+            />
+          ) : showErrorState ? (
+            <ErrorState
+              title={t('ApiStatusHeading')}
+              description={errorMessage}
+              retryLabel={t('ApiStatusRetry')}
+              onRetry={handleRefreshGreeting}
+            />
+          ) : showEmptyState ? (
+            <EmptyState
+              title={t('ApiStatusHeading')}
+              description={t('ApiStatusEmpty')}
+              actionLabel={t('ApiStatusRetry')}
+              onAction={handleRefreshGreeting}
+            />
+          ) : (
+            hasGreeting && (
+              <div className='rounded-2xl border border-gray-100 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70'>
+                <div className='flex flex-wrap items-center justify-between gap-3'>
+                  <div>
+                    <p className='text-sm font-semibold uppercase tracking-wide text-purple-600 dark:text-purple-300'>
+                      {t('ApiStatusHeading')}
+                    </p>
+                    <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>
+                      {t('ApiStatusDescription')}
+                    </p>
+                  </div>
+                  <button
+                    type='button'
+                    onClick={handleRefreshGreeting}
+                    className='rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2'
+                  >
+                    {t('ApiStatusRefresh')}
+                  </button>
+                </div>
+                <div className='mt-4 text-left'>
+                  <p className='text-sm font-medium text-gray-500 dark:text-gray-400'>
+                    {t('ApiStatusSuccess')}
+                  </p>
+                  <p className='mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100'>
+                    {greetingMessage}
+                  </p>
+                </div>
+              </div>
+            )
+          )}
+        </div>
       </section>
 
       {/* Avatar Creator Section */}

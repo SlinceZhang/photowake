@@ -49,6 +49,14 @@
     "Account Terms": "账户条款",
     "One account per user required": "每个用户需要一个账户",
     "Account sharing is not permitted": "不允许账户共享",
-    "Age restriction: 18 years or older": "年龄限制：18岁或以上"
+    "Age restriction: 18 years or older": "年龄限制：18岁或以上",
+    "ApiStatusHeading": "接口状态",
+    "ApiStatusDescription": "我们实时检测后端连接，帮助你尽早发现问题。",
+    "ApiStatusLoading": "正在连接 PhotoWake API...",
+    "ApiStatusEmpty": "接口返回了空数据，请稍后重试。",
+    "ApiStatusError": "暂时无法连接到接口，请稍后再试。",
+    "ApiStatusRetry": "重试",
+    "ApiStatusSuccess": "最新响应",
+    "ApiStatusRefresh": "刷新状态"
   }
 }
