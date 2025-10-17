@@ -4,6 +4,7 @@ import { getMessages } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { Providers } from '../providers'
 import { inter } from '../utils/font'
+import { PageTransition } from '../components/motion/page-transition'
 
 export const metadata: Metadata = {
   title: 'Photo Waker',
@@ -30,7 +31,9 @@ export default async function RootLayout({
         className={`${inter.className} antialiased h-full bg-white dark:bg-zinc-900`}
       >
         <NextIntlClientProvider messages={messages}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <PageTransition>{children}</PageTransition>
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>
