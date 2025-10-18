@@ -1,6 +1,9 @@
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { AllExceptionsFilter } from '../src/common/filters/all-exceptions.filter';
+import { ResponseInterceptor } from '../src/common/interceptors/response.interceptor';
 import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {
@@ -12,13 +15,36 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+        forbidUnknownValues: false,
+      }),
+    );
+
+    const httpAdapterHost = app.get(HttpAdapterHost);
+    app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
+    app.useGlobalInterceptors(new ResponseInterceptor());
+    app.setGlobalPrefix('api');
+
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  afterEach(async () => {
+    await app.close();
+  });
+
+  it('/api (GET)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/api')
       .expect(200)
-      .expect('Hello World!');
+      .expect({
+        success: true,
+        data: 'Hello World!',
+        error: null,
+      });
   });
 });
