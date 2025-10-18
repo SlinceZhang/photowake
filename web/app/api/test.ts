@@ -1,6 +1,3 @@
-import api from '@/app/utils/axios'
+import http from '@/lib/http'
 
-export const getTest = async () => {
-  const response = await api.get('')
-  return response.data
-}
+export const getTest = () => http.get<string>('/')

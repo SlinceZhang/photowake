@@ -49,6 +49,14 @@
     "Account Terms": "Account Terms",
     "One account per user required": "One account per user required",
     "Account sharing is not permitted": "Account sharing is not permitted",
-    "Age restriction: 18 years or older": "Age restriction: 18 years or older"
+    "Age restriction: 18 years or older": "Age restriction: 18 years or older",
+    "ApiStatusHeading": "API status",
+    "ApiStatusDescription": "We check connectivity to the backend so you can spot issues early.",
+    "ApiStatusLoading": "Contacting the PhotoWake API...",
+    "ApiStatusEmpty": "The API responded without data. Try again soon.",
+    "ApiStatusError": "We couldn't reach the API. Please retry in a moment.",
+    "ApiStatusRetry": "Retry",
+    "ApiStatusSuccess": "Latest response",
+    "ApiStatusRefresh": "Refresh status"
   }
 }
