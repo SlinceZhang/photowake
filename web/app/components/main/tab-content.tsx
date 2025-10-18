@@ -17,12 +17,12 @@ export default function TabContent({
 }: TabContentProps) {
   if (activeTab === 'Style') {
     return (
-      <div className='space-y-6'>
-        <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+      <div className='space-y-6 text-foreground'>
+        <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
           {STYLE_OPTIONS.map((style) => (
             <button
               key={style}
-              className='px-4 py-2 rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+              className='rounded-lg bg-surface-muted px-4 py-2 text-primary transition-colors hover:bg-primary-soft'
             >
               {style}
             </button>
@@ -36,14 +36,14 @@ export default function TabContent({
     return (
       <div className='space-y-6'>
         <div className='space-y-2'>
-          <label className='text-sm text-gray-600 dark:text-gray-400'>
+          <label className='text-sm text-foreground-muted'>
             Glasses
           </label>
           <div className='grid grid-cols-2 gap-2'>
             {ACCESSORIES_OPTIONS.glasses.map((type) => (
               <button
                 key={type}
-                className='px-3 py-2 text-sm rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+                className='rounded-lg bg-surface-muted px-3 py-2 text-sm text-primary transition-colors hover:bg-primary-soft'
               >
                 {type}
               </button>
@@ -51,14 +51,14 @@ export default function TabContent({
           </div>
         </div>
         <div className='space-y-2'>
-          <label className='text-sm text-gray-600 dark:text-gray-400'>
+          <label className='text-sm text-foreground-muted'>
             Other
           </label>
           <div className='grid grid-cols-2 gap-2'>
             {ACCESSORIES_OPTIONS.other.map((item) => (
               <button
                 key={item}
-                className='px-3 py-2 text-sm rounded-lg bg-purple-50 dark:bg-zinc-800 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-zinc-700 transition-colors'
+                className='rounded-lg bg-surface-muted px-3 py-2 text-sm text-primary transition-colors hover:bg-primary-soft'
               >
                 {item}
               </button>
@@ -76,8 +76,8 @@ export default function TabContent({
   const paths = Array.isArray(widgetPaths) ? widgetPaths : [widgetPaths]
 
   return (
-    <div className='space-y-6'>
-      <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+    <div className='space-y-6 text-foreground'>
+      <div className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
         {paths.map((path) => (
           <WidgetSelector
             key={path}

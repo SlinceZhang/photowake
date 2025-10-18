@@ -1,20 +1,20 @@
 const Footer = () => {
   return (
     <div className='container mx-auto h-full flex flex-col items-center justify-center gap-2'>
-      <div className='flex items-center gap-8 text-gray-600'>
+      <div className='flex items-center gap-8 text-foreground-muted'>
         <a
           href='#'
-          className='hover:text-gray-900 dark:hover:text-gray-100 transition-colors'
+          className='transition-colors hover:text-foreground'
         >
           License
         </a>
         <a
           href='https://github.com/slince-zero/PhotoWake'
-          className='hover:text-gray-900 dark:hover:text-gray-100 transition-colors flex items-center gap-1'
+          className='flex items-center gap-1 transition-colors hover:text-foreground'
           target='_blank'
         >
           GitHub
-          <svg
+
             className='w-4 h-4'
             fill='none'
             stroke='currentColor'
@@ -29,9 +29,9 @@ const Footer = () => {
           </svg>
         </a>
       </div>
-      <div className='text-sm text-gray-600 flex flex-col items-center justify-center'>
+      <div className='flex flex-col items-center justify-center text-sm text-foreground-muted'>
         <p>Released under the ISC License.</p>
-        <p className='mt-2'>Copyright © 2024 Your Project Contributors</p>
+        <p className='mt-2 text-foreground-subtle'>Copyright © 2024 Your Project Contributors</p>
       </div>
     </div>
   )

@@ -125,11 +125,11 @@ export default function LandingBody() {
       <section className='flex flex-col items-center gap-8 py-12 px-4'>
         {/* Hero Section */}
         <div className='flex flex-wrap gap-4 items-center justify-center'>
-          <h1 className='text-5xl min-h-[70px] md:text-6xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+          <h1 className='text-5xl min-h-[70px] md:text-6xl font-bold text-center bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent'>
             {t('Create Your Unique')}
           </h1>
           <span
-            className={`text-4xl md:min-h-[70px] max-h-[60px] md:text-6xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent inline-block overflow-hidden w-0 animate-typing whitespace-nowrap border-r-4 border-r-purple-600 pb-2 leading-tight ${
+            className={`text-4xl md:min-h-[70px] max-h-[60px] md:text-6xl font-bold text-center bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent inline-block overflow-hidden w-0 animate-typing whitespace-nowrap border-r-4 border-r-purple-600 pb-2 leading-tight ${
               locale === 'zh'
                 ? '[--typing-width:6.4ch]'
                 : '[--typing-width:10.4ch]'
@@ -139,18 +139,18 @@ export default function LandingBody() {
           </span>
         </div>
 
-        <p className='text-xl text-center max-w-2xl bg-gradient-to-r from-purple-500/80 to-pink-500/80 bg-clip-text text-transparent font-medium'>
+        <p className='text-xl text-center max-w-2xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-medium'>
           {t('Design your personalized')}
           {t('Add vibrant colors')}
         </p>
 
         {/* Feature Cards */}
         <div className='grid grid-cols-1 max-w-6xl md:grid-cols-2 gap-8 mt-12'>
-          <div className='group bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800 hover:border-purple-200'>
+          <div className='group bg-surface p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-border hover:border-primary-soft'>
             <div className='flex items-center gap-4 mb-6'>
-              <div className='p-3 bg-gradient-to-br from-purple-100 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-xl'>
+              <div className='p-3 bg-gradient-to-br from-primary-soft to-accent-soft rounded-xl'>
                 <svg
-                  className='w-6 h-6 text-purple-600 dark:text-purple-400'
+                  className='w-6 h-6 text-primary'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -164,20 +164,20 @@ export default function LandingBody() {
                   />
                 </svg>
               </div>
-              <h2 className='text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+              <h2 className='text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent'>
                 {t('Generate Avatar')}
               </h2>
             </div>
-            <p className='text-gray-600 leading-relaxed'>
+            <p className='text-foreground-muted leading-relaxed'>
               {t('Create your unique digital')}
             </p>
           </div>
 
-          <div className='group bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-zinc-800 hover:border-purple-200'>
+          <div className='group bg-surface p-8 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-border hover:border-primary-soft'>
             <div className='flex items-center gap-4 mb-6'>
-              <div className='p-3 bg-gradient-to-br from-purple-100 to-pink-50 dark:from-purple-900 dark:to-pink-900 rounded-xl'>
+              <div className='p-3 bg-gradient-to-br from-primary-soft to-accent-soft rounded-xl'>
                 <svg
-                  className='w-6 h-6 text-purple-600 dark:text-purple-400'
+                  className='w-6 h-6 text-primary'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -191,17 +191,17 @@ export default function LandingBody() {
                   />
                 </svg>
               </div>
-              <h2 className='text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>
+              <h2 className='text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent'>
                 {t('Personalized Coloring')}
               </h2>
             </div>
-            <p className='text-gray-600 leading-relaxed'>
+            <p className='text-foreground-muted leading-relaxed'>
               {t('Express your creativity')}
             </p>
           </div>
         </div>
 
-        <button className='mt-8 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'>
+        <button className='mt-8 px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-full text-xl font-semibold hover:opacity-90 transition-opacity'>
           {t('Start Creating')}
         </button>
 
@@ -260,8 +260,8 @@ export default function LandingBody() {
       </section>
 
       {/* Avatar Creator Section */}
-      <section className='flex flex-col items-center gap-8 py-12 px-4 bg-gradient-to-b from-purple-50 to-pink-50 dark:from-zinc-950 dark:to-zinc-900 rounded-2xl'>
-        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent pb-[1px]'>
+      <section className='flex flex-col items-center gap-8 py-12 px-4 bg-gradient-to-b from-primary-soft to-accent-soft rounded-2xl'>
+        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent pb-[1px]'>
           {t('Magical Avatar')}
         </h2>
 
@@ -272,7 +272,7 @@ export default function LandingBody() {
               ref={confettiRef}
               className='absolute inset-0 w-full h-full pointer-events-none z-50'
             />
-            <div className='flex flex-col justify-center items-center bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-zinc-800 h-full'>
+            <div className='flex flex-col justify-center items-center bg-surface rounded-2xl p-8 shadow-lg border border-border h-full'>
               <div className='w-[240px] h-[240px] mx-auto dark:to-pink-900/30 rounded-xl relative'>
                 <svg
                   viewBox='0 0 240 240'
@@ -383,7 +383,7 @@ export default function LandingBody() {
               </div>
               <button
                 onClick={handleRandomAvatar}
-                className='mt-6 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:opacity-90 transition-opacity'
+                className='mt-6 px-4 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-lg font-medium hover:opacity-90 transition-opacity'
               >
                 {t('Random Generate')}
               </button>
@@ -391,7 +391,7 @@ export default function LandingBody() {
           </div>
 
           {/* Control Panel */}
-          <div className='bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-zinc-800 h-[500px]'>
+          <div className='bg-surface rounded-2xl p-8 shadow-lg border border-border h-[500px]'>
             <div className='flex flex-col h-full'>
               {/* Tabs */}
               <div className='flex space-x-4 border-b border-gray-200 dark:border-zinc-700 mb-6 scrollbar-hide overflow-x-scroll overflow-y-hidden'>
@@ -401,8 +401,8 @@ export default function LandingBody() {
                     onClick={() => setActiveTab(tab)}
                     className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap -mb-[2px] ${
                       activeTab === tab
-                        ? 'text-purple-600 border-purple-600'
-                        : 'text-gray-600 dark:text-gray-400 border-transparent hover:text-purple-600 hover:border-purple-600'
+                        ? 'text-primary border-purple-600'
+                        : 'text-foreground-muted dark:text-gray-400 border-transparent hover:text-primary hover:border-purple-600'
                     }`}
                   >
                     {tab}
@@ -422,7 +422,7 @@ export default function LandingBody() {
                 {/* Hair Color Selector */}
                 {activeTab === 'Hair' && selectedWidgets.hair && (
                   <div className='mt-4 p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg'>
-                    <h3 className='text-sm font-medium mb-3 text-gray-700 dark:text-gray-300'>
+                    <h3 className='text-sm font-medium mb-3 text-foreground-secondary dark:text-gray-300'>
                       {t('Hair Color')}
                     </h3>
                     <div className='flex flex-wrap gap-2'>
@@ -453,7 +453,7 @@ export default function LandingBody() {
               {/* Generate Button */}
               <div className='pt-6'>
                 <button
-                  className='w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity'
+                  className='w-full py-3 bg-gradient-to-r from-primary to-accent text-white rounded-lg font-semibold hover:opacity-90 transition-opacity'
                   onClick={handleCreateAvatar}
                 >
                   {t('Create Avatar')}
@@ -466,7 +466,7 @@ export default function LandingBody() {
 
       {/* Reviews Section */}
       <section className='flex flex-col items-center gap-8 py-12 px-4'>
-        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent pb-[1px]'>
+        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent pb-[1px]'>
           {t('User Reviews')}
         </h2>
 
@@ -477,17 +477,17 @@ export default function LandingBody() {
 
       {/* Terms of Service Section */}
       <section className='flex flex-col items-center gap-8 py-12 px-4'>
-        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent pb-[1px]'>
+        <h2 className='text-4xl font-bold text-center bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent pb-[1px]'>
           {t('Terms of Service')}
         </h2>
 
         <div className='w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6'>
           {/* Privacy & Security */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
+          <div className='bg-surface p-6 rounded-xl shadow-md border border-border'>
+            <h3 className='text-xl font-semibold text-primary mb-4'>
               {t('Privacy & Security')}
             </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
+            <ul className='space-y-3 text-foreground-muted dark:text-gray-400'>
               <li className='flex items-start gap-2'>
                 <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
                 <span>{t('Your data is encrypted and securely stored')}</span>
@@ -510,11 +510,11 @@ export default function LandingBody() {
           </div>
 
           {/* Usage Rights */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
+          <div className='bg-surface p-6 rounded-xl shadow-md border border-border'>
+            <h3 className='text-xl font-semibold text-primary mb-4'>
               {t('Usage Rights')}
             </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
+            <ul className='space-y-3 text-foreground-muted dark:text-gray-400'>
               <li className='flex items-start gap-2'>
                 <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
                 <span>
@@ -535,11 +535,11 @@ export default function LandingBody() {
           </div>
 
           {/* Service Limitations */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
+          <div className='bg-surface p-6 rounded-xl shadow-md border border-border'>
+            <h3 className='text-xl font-semibold text-primary mb-4'>
               {t('Service Limitations')}
             </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
+            <ul className='space-y-3 text-foreground-muted dark:text-gray-400'>
               <li className='flex items-start gap-2'>
                 <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
                 <span>{t('Fair usage policy applies to all plans')}</span>
@@ -558,11 +558,11 @@ export default function LandingBody() {
           </div>
 
           {/* Account Terms */}
-          <div className='bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-100 dark:border-zinc-800'>
-            <h3 className='text-xl font-semibold text-purple-600 dark:text-purple-400 mb-4'>
+          <div className='bg-surface p-6 rounded-xl shadow-md border border-border'>
+            <h3 className='text-xl font-semibold text-primary mb-4'>
               {t('Account Terms')}
             </h3>
-            <ul className='space-y-3 text-gray-600 dark:text-gray-400'>
+            <ul className='space-y-3 text-foreground-muted dark:text-gray-400'>
               <li className='flex items-start gap-2'>
                 <Check className='w-5 h-5 text-green-500 mt-1 flex-shrink-0' />
                 <span>{t('One account per user required')}</span>

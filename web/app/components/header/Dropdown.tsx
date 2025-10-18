@@ -25,16 +25,16 @@ export default function Dropdown({ currentLang }: { currentLang: string }) {
   }
 
   return (
-    <div className='absolute w-24 p-2 flex flex-col gap-2 mt-2 text-lg border shadow bg-white dark:bg-zinc-900 dark:border-zinc-800 rounded-md'>
+    <div className='absolute mt-2 flex w-24 flex-col gap-2 rounded-md border border-border bg-surface p-2 text-lg text-foreground shadow-lg'>
       <ul>
         <li
-          className='hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded px-2 py-1 cursor-pointer'
+          className='cursor-pointer rounded px-2 py-1 transition-colors hover:bg-surface-muted'
           onClick={() => handleLanguageChange('zh')}
         >
           zh {validLang === 'zh' && <span>✓</span>}
         </li>
         <li
-          className='hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded px-2 py-1 cursor-pointer'
+          className='cursor-pointer rounded px-2 py-1 transition-colors hover:bg-surface-muted'
           onClick={() => handleLanguageChange('en')}
         >
           en {validLang === 'en' && <span>✓</span>}

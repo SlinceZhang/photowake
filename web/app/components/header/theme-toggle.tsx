@@ -9,10 +9,15 @@ export function ThemeToggle() {
   return (
     <button
       type='button'
-      className='px-4 py-2 rounded-full ring-1 ring-gray-200 dark:ring-zinc-800'
+      aria-label='Toggle theme'
+      className='rounded-full bg-surface px-4 py-2 ring-1 ring-border transition-colors hover:bg-surface-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-highlight'
       onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
     >
-      {resolvedTheme === 'dark' ? <Sun /> : <MoonStar />}
+      {resolvedTheme === 'dark' ? (
+        <Sun className='text-foreground' />
+      ) : (
+        <MoonStar className='text-foreground' />
+      )}
     </button>
   )
 }

@@ -33,10 +33,10 @@ export function LanguageToggle() {
     <div ref={dropdownRef} className='relative'>
       <button
         type='button'
-        className='px-4 py-2 rounded-full ring-1 ring-gray-200 dark:ring-zinc-800'
+        className='rounded-full bg-surface px-4 py-2 ring-1 ring-border transition-colors hover:bg-surface-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-highlight'
         onClick={toggleDropdown}
       >
-        <Languages />
+        <Languages className='text-foreground' />
       </button>
       {isOpen && <Dropdown currentLang={language} />}
     </div>
