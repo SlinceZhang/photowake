@@ -1,0 +1,98 @@
+version: '3.9'
+
+x-web-env: &web-env
+  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
+  NODE_ENV: ${WEB_NODE_ENV:-production}
+  PORT: ${WEB_PORT:-3000}
+
+x-server-env: &server-env
+  NODE_ENV: ${SERVER_NODE_ENV:-production}
+  PORT: ${SERVER_PORT:-3080}
+
+x-env-files: &env-files
+  - ./.env
+
+services:
+  web:
+    build:
+      context: ../../web
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
+    env_file: *env-files
+    environment: *web-env
+    depends_on:
+      server:
+        condition: service_started
+    expose:
+      - '3000'
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ../../server
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        PORT: ${SERVER_PORT:-3080}
+    env_file: *env-files
+    environment: *server-env
+    expose:
+      - '3080'
+    restart: unless-stopped
+
+  proxy:
+    image: nginx:1.27-alpine
+    depends_on:
+      web:
+        condition: service_started
+      server:
+        condition: service_started
+    ports:
+      - '${NGINX_PORT:-8080}:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  web-dev:
+    profiles:
+      - dev
+    build:
+      context: ../../web
+      dockerfile: Dockerfile
+      target: development
+    env_file: *env-files
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL_DEV:-http://localhost:3080/api}
+      NODE_ENV: development
+    command: ["/bin/sh", "-c", "pnpm install --frozen-lockfile && pnpm dev -- --hostname 0.0.0.0 --port 3000"]
+    ports:
+      - '${WEB_DEV_PORT:-3001}:3000'
+    volumes:
+      - ../../web:/app
+      - web_node_modules:/app/node_modules
+    restart: unless-stopped
+
+  server-dev:
+    profiles:
+      - dev
+    build:
+      context: ../../server
+      dockerfile: Dockerfile
+      target: development
+    env_file: *env-files
+    environment:
+      NODE_ENV: development
+      PORT: ${SERVER_PORT:-3080}
+    command: ["/bin/sh", "-c", "pnpm install --frozen-lockfile && pnpm run dev"]
+    ports:
+      - '${SERVER_DEV_PORT:-3081}:3080'
+    volumes:
+      - ../../server:/app
+      - server_node_modules:/app/node_modules
+    restart: unless-stopped
+
+volumes:
+  web_node_modules:
+  server_node_modules:
